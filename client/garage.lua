@@ -179,21 +179,21 @@ end)
 RegisterNetEvent('diving:client:TakeOutDepot', function(data)
     local ped = PlayerPedId()
     local pos = GetEntityCoords(ped)
-    local putVec3 = vector3(QBBoatshop.Docks[CurrentDock].coords.take.x, QBBoatshop.Docks[CurrentDock].coords.take.y, QBBoatshop.Docks[CurrentDock].coords.take.z)
+    local putVec3 = vector3(QBBoatshop.Depots[CurrentDock].coords.take.x, QBBoatshop.Depots[CurrentDock].coords.take.y, QBBoatshop.Depots[CurrentDock].coords.take.z)
     if #(pos - putVec3) <= 1 then
         local vehicle = data.boat
-        if vehicle.state == 1 then
+        if vehicle.state == 0 then
             QBCore.Functions.SpawnVehicle(vehicle.model, function(veh)
                 SetVehicleNumberPlateText(veh, vehicle.plate)
-                SetEntityHeading(veh, QBBoatshop.Docks[CurrentDock].coords.put.w)
+                SetEntityHeading(veh, QBBoatshop.Depots[CurrentDock].coords.put.w)
                 exports['LegacyFuel']:SetFuel(veh, vehicle.fuel)
-                QBCore.Functions.Notify("vehicle Out: Fuel: "..currentFuel.. "%", "primary", 4500)
+                QBCore.Functions.Notify("You have received youar boat", "primary", 4500)
                 TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
                 TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
                 SetVehicleEngineOn(veh, true, true)
-                TriggerServerEvent('qb-diving:server:SetBoatState', QBCore.Functions.GetPlate(veh), 0, CurrentDock, 100)
+                TriggerServerEvent('qb-diving:server:SetBoatState', QBCore.Functions.GetPlate(veh), 1, CurrentDock, 100)
                 CloseMenu()
-            end, QBBoatshop.Docks[CurrentDock].coords.put, true)
+            end, QBBoatshop.Depots[CurrentDock].coords.put, true)
         else
             QBCore.Functions.Notify("The boat is not in the boathouse", "error", 4500)
         end
